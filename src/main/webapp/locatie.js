@@ -2,7 +2,7 @@
 // Show Managers
 async function loadTable() {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:8080/tkeeps/api/manager/retrieve");
+    xhttp.open("GET", "http://localhost:8080/tkeeps/api/locatie/retrieve");
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -72,7 +72,7 @@ async function userCreate(){
     // const myJson = await response.json(); //extract JSON from the http response
     // do something with myJson
     const xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8080/tkeeps/api/manager/add");
+    xhttp.open("POST", "http://localhost:8080/tkeeps/api/locatie/add");
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(
         JSON.stringify({
@@ -102,7 +102,7 @@ async function showUserEditBox(id) {
     //     }),
     // });
     const xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8080/tkeeps/api/manager/find");
+    xhttp.open("POST", "http://localhost:8080/tkeeps/api/locatie/find");
     xhttp.setRequestHeader("Content-type", "application/json");
     var parameters = JSON.stringify({
         id: id,
@@ -149,7 +149,7 @@ function userEdit() {
     const beschrijving = document.getElementById("beschrijving").value;
 
     const xhttp = new XMLHttpRequest();
-    xhttp.open("PATCH", "http://localhost:8080/tkeeps/api/manager/update");
+    xhttp.open("PATCH", "http://localhost:8080/tkeeps/api/locatie/update");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.send(
         JSON.stringify({
@@ -173,7 +173,7 @@ function userEdit() {
 // Delete Manager
 function userDelete(id) {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "http://localhost:8080/tkeeps/api/manager/remove");
+    xhttp.open("DELETE", "http://localhost:8080/tkeeps/api/locatie/remove");
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(
         JSON.stringify({

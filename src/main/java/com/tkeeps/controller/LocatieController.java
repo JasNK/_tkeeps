@@ -19,7 +19,7 @@ public class LocatieController {
         return locatieService.retrieveLocatieList();
     }
 
-    @GET
+    @POST
     @Path("/find")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

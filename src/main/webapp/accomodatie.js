@@ -58,6 +58,7 @@ async function userCreate(){
     console.log("test");
     const beschrijving = document.getElementById("beschrijving").value;
     const ruimteCode = document.getElementById("ruimteCode").value;
+    const ruimteType = document.getElementById("ruimteType").value;
     const prijs = document.getElementById("prijs").value;
     const cat_id = document.getElementById("cat_id").value;
     const loc_id = document.getElementById("loc_id").value;
@@ -69,6 +70,7 @@ async function userCreate(){
         JSON.stringify({
             beschrijving: beschrijving,
             ruimteCode: ruimteCode,
+            ruimteType: ruimteType,
             prijs: prijs,
             cat_id: cat_id,
             loc_id: loc_id,
@@ -121,7 +123,7 @@ async function showUserEditBox(id) {
                     objects["prijs"] +
                     '">' +
                     '<input id="cat_id" class="swal2-input" placeholder="beschrijving" value="' +
-                    objects["cat_id"] +
+                    objects["catacc.id"] +
                     '">' +
                     '<input id="loc_id" class="swal2-input" placeholder="beschrijving" value="' +
                     objects["loc_id"] +

@@ -17,7 +17,4 @@ public class AppConfig extends Application {
         JPAConfig.getEntityManager();
         return properties;
     }
-
-
-
 }

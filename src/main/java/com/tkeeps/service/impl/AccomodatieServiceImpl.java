@@ -9,9 +9,11 @@ import java.util.List;
 
 public class AccomodatieServiceImpl implements AccomodatieService {
     private final AccomodatieRepo repo;
+//    private final LocatieRepo locRepo;
 
     public AccomodatieServiceImpl() {
         this.repo = new AccomodatieRepo(JPAConfig.getEntityManager());
+//        this.locRepo = new LocatieRepo(JPAConfig.getEntityManager());
     }
     
     @Override
@@ -25,13 +27,13 @@ public class AccomodatieServiceImpl implements AccomodatieService {
     }
 
     @Override
-    public Accomodatie createAccomodatie(Accomodatie Accomodatie) {
-        return repo.createAccomodatie(Accomodatie);
+    public Accomodatie createAccomodatie(Accomodatie accomodatie) {
+        return repo.createAccomodatie(accomodatie);
     }
 
     @Override
-    public Accomodatie updateAccomodatie(Accomodatie Accomodatie) {
-        return repo.updateAccomodatie(Accomodatie);
+    public Accomodatie updateAccomodatie(Accomodatie accomodatie) {
+        return repo.updateAccomodatie(accomodatie);
     }
 
     @Override
@@ -39,4 +41,11 @@ public class AccomodatieServiceImpl implements AccomodatieService {
         repo.deleteAccomodatie(Accomodatie);
         return "Accomodatie deleted";
     }
+//    @Override
+//    public Map<String, List> update2Accomodatie(Accomodatie accomodatie) {
+//        Map<String, List> map = new HashMap<>();
+//        map.put("accomodatie", new ArrayList((Collection) repo.updateAccomodatie(accomodatie)));
+//        map.put("locatie", locRepo.retrieveLocatieList());
+//        return map;
+//    }
 }

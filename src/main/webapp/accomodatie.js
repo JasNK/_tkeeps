@@ -5,7 +5,7 @@ async function loadTable() {
     xhttp.open("GET", "http://localhost:8080/tkeeps/api/accomodatie/retrieve");
     xhttp.send();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
             console.log(this.responseText);
             var trHTML = "";
             const objects = JSON.parse(this.responseText);
@@ -32,6 +32,7 @@ async function loadTable() {
 }
 
 loadTable();
+// setTimeout(renderLocaties(),500); // run donothing after 0.5 seconds
 
 /*--------------------------------------------------------------------------------*/
 // Create Manager
@@ -39,19 +40,25 @@ function showUserCreateBox() {
     Swal.fire({
         title: "Create manager",
         html:
-            '<input id="id" type="hidden">' +
+            // '<input id="id" type="hidden">' +
             '<input id="beschrijving" class="swal2-input" placeholder="beschrijving">' +
             '<input id="ruimteCode" class="swal2-input" placeholder="ruimte code">' +
             '<input id="ruimteType" class="swal2-input" placeholder="ruimte type">' +
             '<input id="prijs" class="swal2-input" placeholder="prijs">' +
-            '<input id="cat_id" class="swal2-input" placeholder="1">' +
-            '<input id="loc_id" class="swal2-input" placeholder="1">'
-        ,
+            '<div><select id="catacc">\n' +
+            '                    <option value="">categorie</option>\n' +
+            '                </select></div>' +
+            '<div><select id="locacc">\n' +
+            '                    <option value="">locatie</option>\n' +
+            '                </select></div>',
         focusConfirm: false,
         preConfirm: () => {
             userCreate();
         },
     });
+    renderLocaties();
+    setTimeout(1000);
+    renderCategorie();
 }
 
 async function userCreate(){
@@ -60,8 +67,8 @@ async function userCreate(){
     const ruimteCode = document.getElementById("ruimteCode").value;
     const ruimteType = document.getElementById("ruimteType").value;
     const prijs = document.getElementById("prijs").value;
-    const cat_id = document.getElementById("cat_id").value;
-    const loc_id = document.getElementById("loc_id").value;
+    const catacc = document.getElementById("catacc").value;
+    const locacc = document.getElementById("locacc").value;
     // do something with myJson
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8080/tkeeps/api/accomodatie/add");
@@ -72,13 +79,12 @@ async function userCreate(){
             ruimteCode: ruimteCode,
             ruimteType: ruimteType,
             prijs: prijs,
-            cat_id: cat_id,
-            loc_id: loc_id,
+            catacc: catacc,
+            locacc: locacc,
         })
     );
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            const objects = JSON.parse(this.responseText);
+        if (this.readyState === 4 && this.status === 200) {
             Swal.fire("Accomodatie created");
             loadTable();
         }
@@ -99,7 +105,7 @@ async function showUserEditBox(id) {
     });
     xhttp.send(parameters);
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
             const objects = JSON.parse(this.responseText);
             console.log (objects);
             // const manager = objects["manager"];
@@ -110,39 +116,44 @@ async function showUserEditBox(id) {
                     '<input id="id" readonly value=' +
                     objects["id"] +
                     ">" +
-                    '<input id="beschrijving" class="swal2-input" placeholder="naam" value="' +
+                    '<input id="beschrijving" class="swal2-input" placeholder="beschrijving" value="' +
                     objects["beschrijving"] +
                     '">' +
-                    '<input id="ruimteCode" class="swal2-input" placeholder="gebDatum" value="' +
+                    '<input id="ruimteCode" class="swal2-input" placeholder="ruimteCode" value="' +
                     objects["ruimteCode"] +
                     '">' +
-                    '<input id="ruimteType" class="swal2-input" placeholder="beschrijving" value="' +
+                    '<input id="ruimteType" class="swal2-input" placeholder="ruimteType" value="' +
                     objects["ruimteType"] +
                     '">' +
-                    '<input id="prijs" class="swal2-input" placeholder="beschrijving" value="' +
+                    '<input id="prijs" class="swal2-input" placeholder="prijs" value="' +
                     objects["prijs"] +
                     '">' +
-                    '<input id="cat_id" class="swal2-input" placeholder="beschrijving" value="' +
-                    objects["catacc.id"] +
-                    '">' +
-                    '<input id="loc_id" class="swal2-input" placeholder="beschrijving" value="' +
-                    objects["loc_id"] +
-                    '">' ,
+                    '<div><select id="catacc">\n' +
+                    '                    <option value="">categorie</option>\n' +
+                    '                </select></div>' +
+                    '<div><select id="locacc">\n' +
+                    '                    <option value="">locatie</option>\n' +
+                    '                </select></div>',
                 focusConfirm: false,
                 preConfirm: () => {
                     userEdit();
                 },
             });
+            renderLocaties();
+            setTimeout(500);
+            renderCategorie();
         }
     };
     // xhttp.abort();
 }
 
 function userEdit() {
-    const id = document.getElementById("id").value;
-    const naam = document.getElementById("naam").value;
-    const gebDatum = document.getElementById("gebDatum").value;
     const beschrijving = document.getElementById("beschrijving").value;
+    const ruimteCode = document.getElementById("ruimteCode").value;
+    const ruimteType = document.getElementById("ruimteType").value;
+    const prijs = document.getElementById("prijs").value;
+    const catacc = document.getElementById("catacc").value;
+    const locacc = document.getElementById("locacc").value;
 
     const xhttp = new XMLHttpRequest();
     xhttp.open("PATCH", "http://localhost:8080/tkeeps/api/accomodatie/update");
@@ -151,13 +162,14 @@ function userEdit() {
         JSON.stringify({
             beschrijving: beschrijving,
             ruimteCode: ruimteCode,
+            ruimteType: ruimteType,
             prijs: prijs,
-            cat_id: cat_id,
-            loc_id: loc_id,
+            catacc: catacc,
+            locacc: locacc,
         })
     );
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
             // const objects = JSON.parse(this.responseText);
             Swal.fire("Accomodatie edited");
             loadTable();
@@ -167,7 +179,7 @@ function userEdit() {
 }
 
 /*--------------------------------------------------------------------------------*/
-// Delete Manager
+// Delete Accomodatie
 function userDelete(id) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("DELETE", "http://localhost:8080/tkeeps/api/accomodatie/remove");
@@ -181,10 +193,44 @@ function userDelete(id) {
     // Swal.fire("Manager deleted");
     // xhttp.abort();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4) {
+        if (this.readyState === 4) {
             // const objects = JSON.parse(this.responseText);
             Swal.fire("Accomodatie deleted");
             loadTable();
         }
     };
+}
+
+/*--------------------------------------------------------------------------------*/
+// Locatie  & Categorie objects
+async function renderLocaties() {
+    const dropdown = document.getElementById("locacc");
+    fetch("http://localhost:8080/tkeeps/api/locatie/retrieve")
+        .then(response => response.json())
+        .then(data =>{
+            data.forEach(item => {
+                let option = document.createElement("option");
+                option.value = item.id;
+                option.value = item.coordinaten;
+                option.value = item.naam;
+                option.text = item.naam;
+                dropdown.appendChild(option);
+            });
+        });
+}
+
+async function renderCategorie() {
+    const dropdown = document.getElementById("catacc");
+    fetch("http://localhost:8080/tkeeps/api/categorie/retrieve")
+        .then(response => response.json())
+        .then(data =>{
+            data.forEach(item => {
+                let option = document.createElement("option");
+                option.value = item.id;
+                option.value = item.beschrijving;
+                option.value = item.code;
+                option.text = item.code;
+                dropdown.appendChild(option);
+            });
+        });
 }

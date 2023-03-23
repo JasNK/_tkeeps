@@ -13,4 +13,6 @@ public interface AccomodatieService {
     String deleteAccomodatie(Accomodatie accomodatie);
 
     Accomodatie updateAccomodatie(Accomodatie accomodatie);
+
+//    Map<String, List> update2Accomodatie(Accomodatie accomodatie);
 }

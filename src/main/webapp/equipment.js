@@ -147,7 +147,7 @@ async function showUserEditBox(id) {
 }
 
 function userEdit() {
-    // const id = document.getElementById("id").value;
+    const id = document.getElementById("id").value;
     const naam = document.getElementById("naam").value;
     const type = document.getElementById("type").value;
     const beschrijving = document.getElementById("beschrijving").value;

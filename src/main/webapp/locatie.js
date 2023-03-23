@@ -41,24 +41,27 @@ loadTable();
 // Create Manager
 function showUserCreateBox() {
     Swal.fire({
-        title: "Create manager",
+        title: "Create locatie",
         html:
             '<input id="id" type="hidden" required>' +
             '<input id="coordinaten" class="swal2-input" placeholder="coordinaten" required>' +
             '<input id="type" class="swal2-input" placeholder="type" required>' +
-            '<input id="beschrijving" class="swal2-input" placeholder="beschrijving" required>',
-        // '<input id="email" class="swal2-input" placeholder="Email">',
+            '<input id="beschrijving" class="swal2-input" placeholder="beschrijving" required>' +
+            '<div><select id="manager" required>\n' +
+            '                    <option value="">locatie</option>\n' +
+            '                </select></div>',
         focusConfirm: false,
         preConfirm: () => {
             userCreate();
         },
     });
+    renderManger();
 }
 
 async function userCreate(){
     console.log("test");
     const coordinaten = document.getElementById("coordinaten").value;
-    const type = document.getElementById("type").value;
+    const naam = document.getElementById("type").value;
     const beschrijving = document.getElementById("beschrijving").value;
 
     // const response = await fetch('http://localhost:8080/tkeeps/api/manager/add', {
@@ -81,8 +84,9 @@ async function userCreate(){
     xhttp.send(
         JSON.stringify({
             naam: naam,
-            type: type,
+            coordinaten: coordinaten,
             beschrijving: beschrijving,
+            manager: manager,
         })
     );
     xhttp.onreadystatechange = function () {
@@ -132,15 +136,16 @@ async function showUserEditBox(id) {
                     '">' +
                     '<input id="beschrijving" required class="swal2-input" placeholder="beschrijving" value="' +
                     objects["beschrijving"] +
-                    '">',
-                // '<input id="email" class="swal2-input" placeholder="Email" value="' +
-                // user["email"] +
-                // '">',
+                    '">' +
+                    '<div><select id="manager" required>\n' +
+                    '                    <option value="">locatie</option>\n' +
+                    '                </select></div>',
                 focusConfirm: false,
                 preConfirm: () => {
                     userEdit();
                 },
             });
+            renderManger();
         }
     };
     // xhttp.abort();
@@ -149,7 +154,7 @@ async function showUserEditBox(id) {
 function userEdit() {
     const id = document.getElementById("id").value;
     const coordinaten = document.getElementById("coordinaten").value;
-    const type = document.getElementById("type").value;
+    const naam = document.getElementById("type").value;
     const beschrijving = document.getElementById("beschrijving").value;
 
     const xhttp = new XMLHttpRequest();
@@ -159,8 +164,9 @@ function userEdit() {
         JSON.stringify({
             id: id,
             coordinaten: coordinaten,
-            type: type,
+            naam: naam,
             beschrijving: beschrijving,
+            manager: manager,
         })
     );
     xhttp.onreadystatechange = function () {
@@ -184,13 +190,13 @@ function userDelete(id) {
             id: id,
         })
     );
-    console.log("Manager deleted");
+    console.log("Locatie deleted");
     // Swal.fire("Manager deleted");
     // xhttp.abort();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             // const objects = JSON.parse(this.responseText);
-            Swal.fire("Manager deleted");
+            Swal.fire("Locatie deleted");
             loadTable();
         }
     };
@@ -226,6 +232,12 @@ async function showUser(id) {
                     '">' +
                     '<input id="beschrijving" readonly class="swal2-input" placeholder="beschrijving" value="' +
                     objects["beschrijving"] +
+                    '">' +
+                    '<input id="managerId" readonly class="swal2-input" placeholder="managerId" value="' +
+                    objects.manager["id"] +
+                    '">' +
+                    '<input id="managerNaam" readonly class="swal2-input" placeholder="managerNaam" value="' +
+                    objects.manager["naam"] +
                     '">',
                 focusConfirm: false,
                 preConfirm: () => {
@@ -233,4 +245,24 @@ async function showUser(id) {
             });
         }
     };
+}
+
+/*--------------------------------------------------------------------------------*/
+// Locatie  & Categorie objects
+async function renderManger() {
+    const dropdown = document.getElementById("manager");
+    fetch("http://localhost:8080/tkeeps/api/manager/retrieve")
+        .then(response => response.json())
+        .then(data =>{
+            data.forEach(item => {
+                let option = document.createElement("option");
+                option.value = item.id;
+                option.value = item.beschrijving;
+                option.value = item.gebDatum;
+                option.value = item.naam;
+                option.text = item.naam;
+                dropdown.appendChild(option);
+            });
+        });
+    console.log(data);
 }

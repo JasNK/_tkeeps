@@ -47,15 +47,15 @@ function showUserCreateBox() {
     Swal.fire({
         title: "Create manager",
         html:
-            // '<input id="id" type="hidden">' +
+            '<input id="id" type="hidden">' +
             '<input id="beschrijving" class="swal2-input" placeholder="beschrijving" required>' +
             '<input id="ruimteCode" class="swal2-input" placeholder="ruimte code" required>' +
             '<input id="ruimteType" class="swal2-input" placeholder="ruimte type" required>' +
             '<input id="prijs" class="swal2-input" placeholder="prijs" required>' +
-            '<div><select id="catacc" required>\n' +
+            '<div><select id="catacc" >\n' +
             '                    <option value="">categorie</option>\n' +
             '                </select></div>' +
-            '<div><select id="locacc" required>\n' +
+            '<div><select id="locacc" >\n' +
             '                    <option value="">locatie</option>\n' +
             '                </select></div>',
         focusConfirm: false,
@@ -69,19 +69,22 @@ function showUserCreateBox() {
 }
 
 async function userCreate(){
-    console.log("test");
+
+    const id = document.getElementById("id").value;
     const beschrijving = document.getElementById("beschrijving").value;
     const ruimteCode = document.getElementById("ruimteCode").value;
     const ruimteType = document.getElementById("ruimteType").value;
     const prijs = document.getElementById("prijs").value;
     const catacc = document.getElementById("catacc").value;
     const locacc = document.getElementById("locacc").value;
+    console.log(id + beschrijving + ruimteCode + prijs + catacc + locacc);
     // do something with myJson
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8080/tkeeps/api/accomodatie/add");
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(
         JSON.stringify({
+            id: id,
             beschrijving: beschrijving,
             ruimteCode: ruimteCode,
             ruimteType: ruimteType,
@@ -155,6 +158,7 @@ async function showUserEditBox(id) {
 }
 
 function userEdit() {
+    const id = document.getElementById("id").value;
     const beschrijving = document.getElementById("beschrijving").value;
     const ruimteCode = document.getElementById("ruimteCode").value;
     const ruimteType = document.getElementById("ruimteType").value;
@@ -167,6 +171,7 @@ function userEdit() {
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.send(
         JSON.stringify({
+            id: id,
             beschrijving: beschrijving,
             ruimteCode: ruimteCode,
             ruimteType: ruimteType,

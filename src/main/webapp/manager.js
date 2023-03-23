@@ -10,11 +10,16 @@ async function loadTable() {
             var trHTML = "";
             const objects = JSON.parse(this.responseText);
             for (let object of objects) {
+                trHTML += "<tr>";
                 trHTML += "<td>" + object["id"] + "</td>";
                 trHTML += "<td>" + object["naam"] + "</td>";
                 trHTML += "<td>" + object["beschrijving"] + "</td>";
                 trHTML +=
-                    '<td><button type="button" class="btn btn-primary" onclick="showUserEditBox(' +
+                    '<td><button type="button" class="btn btn-secondary" onclick="showUser(' +
+                    object["id"] +
+                    ')">Show</button>';
+                trHTML +=
+                    '<button type="button" class="btn btn-primary" onclick="showUserEditBox(' +
                     object["id"] +
                     ')">Edit</button>';
                 trHTML +=
@@ -38,9 +43,9 @@ function showUserCreateBox() {
         title: "Create manager",
         html:
             // '<input id="id" readonly>' +
-            '<input id="naam" class="swal2-input" placeholder="naam">' +
-            '<input id="gebDatum" class="swal2-input" placeholder="gebDatum">' +
-            '<input id="beschrijving" class="swal2-input" placeholder="beschrijving">',
+            '<input id="naam" class="swal2-input" placeholder="naam" required>' +
+            '<input id="gebDatum" class="swal2-input" placeholder="gebDatum" required>' +
+            '<input id="beschrijving" class="swal2-input" placeholder="beschrijving" required>',
         focusConfirm: false,
         preConfirm: () => {
             userCreate();
@@ -165,6 +170,45 @@ function userDelete(id) {
             // const objects = JSON.parse(this.responseText);
             Swal.fire("Manager deleted");
             loadTable();
+        }
+    };
+}
+
+/*--------------------------------------------------------------------------------*/
+// Show Accomodatie
+async function showUser(id) {
+    console.log(id);
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8080/tkeeps/api/manager/find");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    var parameters = JSON.stringify({
+        id: id,
+    });
+    xhttp.send(parameters);
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            const objects = JSON.parse(this.responseText);
+            console.log (objects);
+            Swal.fire({
+                title: "Show User",
+                html:
+                    '<input id="id" readonly value=' +
+                    objects["id"] +
+                    ">" +
+                    '<input id="naam" readonly class="swal2-input" placeholder="naam" value="' +
+                    objects["naam"] +
+                    '">' +
+                    '<input id="gebDatum" readonly class="swal2-input" placeholder="gebDatum" value="' +
+                    objects["gebDatum"] +
+                    '">' +
+                    '<input id="beschrijving" readonly class="swal2-input" placeholder="beschrijving" value="' +
+                    objects["beschrijving"] +
+                    '">',
+                focusConfirm: false,
+                preConfirm: () => {
+                },
+            });
         }
     };
 }
